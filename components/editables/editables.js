@@ -48,7 +48,7 @@ Editables.directive('editable', function()
             }.bind(this));
 
             // Bind changes to the content editable to the scope
-            $element.blur(function(evt)
+            $element.on('input', function(evt)
             {
                 // Check for 'empty' contents. Sometimes, editable inserts a "<br>" tag.
                 if($element.html() == "<br>")

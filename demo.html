@@ -94,11 +94,7 @@
                 as well as an initial value, by binding to a model that's already populated.
             </p>
             <p>
-                Even though this is the most basic case, it's already as usable as your normal input element. One thing
-                to note, the value of the modle is only populated on <code>blur</code>. This is because the blur event
-                is <i>slightly</i> more compatible across browsers (as opposed to the HTML5 <code>input</code> event),
-                and in the average use case, it's perfectly acceptable. I may consider moving to the <code>input</code>
-                event, eventually.
+                Even though this is the most basic case, it's already as usable as your normal input element.
             </p>
 
 
@@ -107,6 +103,14 @@
                 <input class="input-xxlarge" type="text" placeholder="Type something here..." ng-model="test.val">
                 <h3 editable="test.val">Or here...</h3>
             </div>
+            <p>
+                Editables are designed to work just like input elements, when it comes to binding them to models. Instead
+                of using <code>ng-model="foo"</code>, however, you simply pass the value to the editable directive:
+                <code>editable="foo</code>. This works just like you'd expect.
+            </p>
+            <p>
+                Play with both the input field, and the editable, to get a good feel for how the binding works.
+            </p>
         </div>
     </body>
 </html>
