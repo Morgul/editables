@@ -12,14 +12,21 @@ Editables.directive('editable', function()
         restrict: 'A',
         controller: function($scope, $element, $attrs, $parse)
         {
+            var editing = false;
+
             // Store the value of the element as placeholder text.
             var placeholder = "<span class='placeholder'>" + $element.html() + "</span>";
+            $element.html("");
+
+            // Build a wrapper element, to help prevent style issues.
+            var element = angular.element("<div></div>");
+            element.appendTo($element);
 
             // Make the element content editable
-            $element.attr("contenteditable","true");
+            element.attr("contenteditable","true");
 
             // Set appropriate css
-            $element.addClass('editable');
+            element.addClass('editable');
 
             // Define the model we're 'bound' to.
             var _model = $parse($attrs.editable);
@@ -37,46 +44,53 @@ Editables.directive('editable', function()
             // Bind scope changes to the value of the element.
             $scope.$watch($attrs.editable, function()
             {
-                if(!this.model)
+                if(!this.model && !editing)
                 {
-                    $element.html(placeholder);
+                    element.html(placeholder);
                 }
                 else
                 {
-                    $element.html(this.model);
+                    if(this.model != element.html())
+                    {
+                        element.html(this.model);
+                    } // end if
                 } // end if
             }.bind(this));
 
             // Bind changes to the content editable to the scope
-            $element.on('input', function(evt)
+            element.on('input', function(evt)
             {
-                // Check for 'empty' contents. Sometimes, editable inserts a "<br>" tag.
-                if($element.html() == "<br>")
-                {
-                    $element.html("");
-                } // end if
+                this.model = element.html();
 
-                this.model = $element.html();
+                $scope.$apply();
+            }.bind(this));
+
+            // Handle bluring with no contents.
+            element.blur(function(evt)
+            {
+                editing = false;
 
                 // Check to see if we need to apply placeholder text.
-                if(!$element.html())
+                if(!element.text())
                 {
-                    $element.html(placeholder);
+                    element.html(placeholder);
                 } // end if
 
                 $scope.$apply();
             }.bind(this));
 
             // Handle removing the placeholder text on focus
-            $element.focus(function(evt)
+            element.focus(function(evt)
             {
+                editing = true;
+
                 if(!this.model)
                 {
-                    $element.html("");
+                    element.html("");
 
                     // Reposition the text cursor to the start of the element.
                     var range = document.createRange();
-                    range.setStart($element[0], 0);
+                    range.setStart(element[0], 0);
                     window.getSelection().addRange(range);
                 } // end if
 
