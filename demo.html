@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html ng-app="demoApp">
+    <head>
+        <title>Editables Demo Page</title>
+
+        <!-- Styles -->
+        <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-combined.no-icons.min.css" rel="stylesheet">
+        <link href="http://bootswatch.com/spacelab/bootstrap.min.css" rel="stylesheet">
+        <link href="//netdna.bootstrapcdn.com/font-awesome/3.0.2/css/font-awesome.css" rel="stylesheet">
+
+        <!-- Application Styles -->
+        <style>
+            .example
+            {
+                position: relative;
+                margin: 15px 0;
+                padding: 39px 19px 14px;
+                background-color: #fff;
+                border: 1px solid #ddd;
+                -webkit-border-radius: 4px;
+                -moz-border-radius: 4px;
+                border-radius: 4px;
+            }
+
+            .example:after
+            {
+                content: "Example";
+                position: absolute;
+                top: -1px;
+                left: -1px;
+                padding: 3px 7px;
+                font-size: 12px;
+                font-weight: bold;
+                background-color: #f5f5f5;
+                border: 1px solid #ddd;
+                color: #9da0a4;
+                -webkit-border-radius: 4px 0 4px 0;
+                -moz-border-radius: 4px 0 4px 0;
+                border-radius: 4px 0 4px 0;
+            }
+        </style>
+
+        <!-- Javascript -->
+        <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.1.4/angular.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.1.4/angular-resource.min.js"></script>
+        <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/js/bootstrap.min.js"></script>
+
+        <!-- Application JS -->
+        <script src="/components/demo/demo.js"></script>
+
+        <!-- Editables -->
+        <link href="/components/editables/editables.css" rel="stylesheet">
+        <script src="/components/editables/editables.js"></script>
+    </head>
+    <body>
+        <div class="navbar">
+            <div class="navbar-inner">
+                <a class="brand" href="/">Angular Editables</a>
+                <a href="https://github.com/Morgul/editables" class="btn btn-primary pull-right"><i class="icon-github"></i> View on Github</a>
+            </div>
+        </div>
+
+        <div class="content container">
+            <h2>What is this?</h2>
+            <p>
+                Angular Editables is a project thatis designed to fill a particular niche when working with AngularJS projects.
+                Specifically, it's all about turning html elements into editable inputs that are easy to bind to. This is similar
+                in concept to the <a href="">x-editables</a> project, with a few big exceptions:
+            </p>
+            <p>
+                <ul>
+                    <li>Editables does not care what element you want to make editabled.</li>
+                    <li>Editables is designed to work exclusively with AngularJS.</li>
+                    <li>Editabled is tightly integrated with Bootstrap. <i>(This will change in the future.)</i></li>
+                    <li>Editables uses <code>contenteditable</code> under the hood.</li>
+                </ul>
+            </p>
+            <p>
+                As with most libraries of this nature, Editables has been designed to scratch my particular itch, and isn't
+                necessarily the best general design possible. Still, it's here in case you find it useful. If you'd like
+                to improve the project, fix an issue you've found, or otherwise make changes, feel free to
+                <a href="https://github.com/Morgul/editables">fork it.</a>
+            </p>
+
+            <h2>Simple Example</h2>
+            <div class="example" ng-init="foobar='This is an editable. <b>Click it</b>. It won\'t bite.'">
+                <h3 editable="foobar">Type something here...</h3>
+            </div>
+            <p>
+                Click on the editable to edit it. As you can see, it works exactly as you'd expect. If you look at the
+                source, you'll notice that the contents of the element are used as placeholder text, when the editable's
+                value is empty. While this might be a little bit confusing, it means that you can have placeholder text,
+                as well as an initial value, by binding to a model that's already populated.
+            </p>
+            <p>
+                Even though this is the most basic case, it's already as usable as your normal input element. One thing
+                to note, the value of the modle is only populated on <code>blur</code>. This is because the blur event
+                is <i>slightly</i> more compatible across browsers (as opposed to the HTML5 <code>input</code> event),
+                and in the average use case, it's perfectly acceptable. I may consider moving to the <code>input</code>
+                event, eventually.
+            </p>
+
+
+            <h2>Two-way binding</h2>
+            <div class="example">
+                <input class="input-xxlarge" type="text" placeholder="Type something here..." ng-model="test.val">
+                <h3 editable="test.val">Or here...</h3>
+            </div>
+        </div>
+    </body>
+</html>

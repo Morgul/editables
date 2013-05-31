@@ -1,0 +1,23 @@
+.editable
+{
+    cursor: pointer;
+    padding: 0 5px;
+    border: 1px solid transparent;
+}
+
+.editable:focus
+{
+    cursor: text;
+    border: 1px solid transparent !important;
+}
+
+.editable:hover
+{
+    border: 1px dashed #DDD;
+}
+
+.editable .placeholder
+{
+    color: #AAA;
+    font-style: italic;
+}
