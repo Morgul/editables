@@ -97,11 +97,10 @@
                 Even though this is the most basic case, it's already as usable as your normal input element.
             </p>
 
-
             <h2>Two-way binding</h2>
             <div class="example">
                 <input class="input-xxlarge" type="text" placeholder="Type something here..." ng-model="test.val">
-                <h3 editable="test.val">Or here...</h3>
+                <h3 editable="test.val" type="line">Or here...</h3>
             </div>
             <p>
                 Editables are designed to work just like input elements, when it comes to binding them to models. Instead
@@ -110,6 +109,19 @@
             </p>
             <p>
                 Play with both the input field, and the editable, to get a good feel for how the binding works.
+            </p>
+
+            <h2>Single-line</h2>
+            <div class="example">
+                <h3 editable="bar" type="line">Type here...</h3>
+                <div class="well">
+                    {{ bar }}
+                </div>
+            </div>
+            <p>
+                By default, editables work like normal content editables, and support multi-line entry. However,
+                sometimes all you want is a single line entry. Editabled supports that too, by specifying
+                <code>type="line"</code>. See for yourself.
             </p>
         </div>
     </body>

@@ -6,6 +6,24 @@
 
 var Editables = angular.module('editables', []);
 
+//----------------------------------------------------------------------------------------------------------------------
+// Helpers
+//----------------------------------------------------------------------------------------------------------------------
+
+function stripElement(element, type)
+{
+    var html =  element.html().replace(/\s*<br>\s*$/, '');
+
+    if(type == "line")
+    {
+        html = html.replace(/<div>|<br>|<\/div>/g, '');
+    } // end if
+
+    return html;
+} // end stripElement
+
+//----------------------------------------------------------------------------------------------------------------------
+
 Editables.directive('editable', function()
 {
     return {
@@ -27,6 +45,12 @@ Editables.directive('editable', function()
 
             // Set appropriate css
             element.addClass('editable');
+
+            // Support single-line mode
+            if($attrs.type == "line")
+            {
+                element.addClass('single-line');
+            } // end if
 
             // Define the model we're 'bound' to.
             var _model = $parse($attrs.editable);
@@ -50,10 +74,7 @@ Editables.directive('editable', function()
                 }
                 else
                 {
-                    // Strip trailing br
-                    html =  element.html().replace(/\s*<br>\s*$/, '');
-
-                    if(this.model != html)
+                    if(this.model != stripElement(element, $attrs.type))
                     {
                         element.html(this.model);
                     } // end if
@@ -68,12 +89,7 @@ Editables.directive('editable', function()
                     element.html("<br>");
                 } // end if
 
-                var html = element.html();
-
-                // Strip trailing br
-                html =  html.replace(/\s*<br>\s*$/, '');
-
-                this.model = html;
+                this.model = stripElement(element, $attrs.type);
 
                 $scope.$apply();
             }.bind(this));

@@ -21,3 +21,20 @@
     color: #AAA;
     font-style: italic;
 }
+
+.editable.single-line
+{
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.editable.single-line br
+{
+    display:none;
+}
+
+.editable.single-line *
+{
+    display:inline;
+    white-space:nowrap;
+}
