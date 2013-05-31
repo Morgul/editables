@@ -50,7 +50,10 @@ Editables.directive('editable', function()
                 }
                 else
                 {
-                    if(this.model != element.html())
+                    // Strip trailing br
+                    html =  element.html().replace(/\s*<br>\s*$/, '');
+
+                    if(this.model != html)
                     {
                         element.html(this.model);
                     } // end if
@@ -60,7 +63,17 @@ Editables.directive('editable', function()
             // Bind changes to the content editable to the scope
             element.on('input', function(evt)
             {
-                this.model = element.html();
+                if(!element.html().trim())
+                {
+                    element.html("<br>");
+                } // end if
+
+                var html = element.html();
+
+                // Strip trailing br
+                html =  html.replace(/\s*<br>\s*$/, '');
+
+                this.model = html;
 
                 $scope.$apply();
             }.bind(this));
@@ -86,7 +99,7 @@ Editables.directive('editable', function()
 
                 if(!this.model)
                 {
-                    element.html("");
+                    element.html("<br>");
 
                     // Reposition the text cursor to the start of the element.
                     var range = document.createRange();
