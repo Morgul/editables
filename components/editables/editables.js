@@ -32,9 +32,12 @@ Editables.directive('editable', function()
         {
             var editing = false;
 
+            // Required for our css to work
+            $element.css('position', 'relative');
+
             // Store the value of the element as placeholder text.
             var placeholder = "<span class='placeholder'>" + $element.html() + "</span>";
-            $element.html("");
+            $element.html("<br>");
 
             // Build a wrapper element, to help prevent style issues.
             var element = angular.element("<div></div>");
