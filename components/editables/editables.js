@@ -7,53 +7,12 @@
 var Editables = angular.module('editables', []);
 
 //----------------------------------------------------------------------------------------------------------------------
-// Helpers
+// Controller
 //----------------------------------------------------------------------------------------------------------------------
 
-function stripElement(element, type)
-{
-    var html =  element.html().replace(/\s*<br>\s*$/, '');
-
-    if(type == "line")
-    {
-        html = html.replace(/<div>|<br>|<\/div>/g, '');
-    } // end if
-
-    return html;
-} // end stripElement
-
-//----------------------------------------------------------------------------------------------------------------------
-
-Editables.directive('editable', function()
-{
-    return {
-        restrict: 'A',
-        controller: function($scope, $element, $attrs, $parse)
+Editables.controller('EditableController', ['$scope', '$element', '$attrs', '$parse', function($scope, $element, $attrs, $parse)
         {
             var editing = false;
-
-            // Required for our css to work
-            $element.css('position', 'relative');
-
-            // Store the value of the element as placeholder text.
-            var placeholder = "<span class='placeholder'>" + $element.html() + "</span>";
-            $element.html("<br>");
-
-            // Build a wrapper element, to help prevent style issues.
-            var element = angular.element("<div></div>");
-            element.appendTo($element);
-
-            // Make the element content editable
-            element.attr("contenteditable","true");
-
-            // Set appropriate css
-            element.addClass('editable');
-
-            // Support single-line mode
-            if($attrs.type == "line")
-            {
-                element.addClass('single-line');
-            } // end if
 
             // Define the model we're 'bound' to.
             var _model = $parse($attrs.editable);
@@ -67,6 +26,16 @@ Editables.directive('editable', function()
                     _model.assign($scope, val);
                 }
             });
+
+            // Build our placeholder text
+            var placeholder = buildPlaceholder($element);
+
+            // Build our editable element
+            var element = buildElement($element, $attrs.type, $scope);
+
+            //----------------------------------------------------------------------------------------------------------
+            // Event Handlers
+            //----------------------------------------------------------------------------------------------------------
 
             // Bind scope changes to the value of the element.
             $scope.$watch($attrs.editable, function()
@@ -128,7 +97,64 @@ Editables.directive('editable', function()
 
                 $scope.$apply();
             }.bind(this));
-        } // end controller
+        }]); // end EditableController
+
+//----------------------------------------------------------------------------------------------------------------------
+// Helpers
+//----------------------------------------------------------------------------------------------------------------------
+
+function buildPlaceholder(parent)
+{
+    // Store the value of the element as placeholder text.
+    var placeholder = "<span class='placeholder'>" + parent.html() + "</span>";
+    parent.html("<br>");
+
+    return placeholder;
+} // end buildPlaceholder
+
+function buildElement(parent, type)
+{
+    // Required for our css to work
+    parent.css('position', 'relative');
+
+    // Build a wrapper element, to help prevent style issues.
+    var element = angular.element("<div></div>");
+    element.appendTo(parent);
+
+    // Make the element content editable
+    element.attr("contenteditable","true");
+
+    // Set appropriate css
+    element.addClass('editable');
+
+    // Support single-line mode
+    if(type == "line")
+    {
+        element.addClass('single-line');
+    } // end if
+
+    return element;
+} // end buildElement
+
+function stripElement(element, type)
+{
+    var html =  element.html().replace(/\s*<br>\s*$/, '');
+
+    if(type == "line")
+    {
+        html = html.replace(/<div>|<br>|<\/div>/g, '');
+    } // end if
+
+    return html;
+} // end stripElement
+
+//----------------------------------------------------------------------------------------------------------------------
+
+Editables.directive('editable', function()
+{
+    return {
+        restrict: 'A',
+        controller: 'EditableController'
     }
 }); // end editable directive
 
