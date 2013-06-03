@@ -4,6 +4,14 @@
 // @module demo.js
 //----------------------------------------------------------------------------------------------------------------------
 
-angular.module('demoApp', ['editables']);
+angular.module('demoApp', ['editables']).run(function($rootScope)
+{
+    $rootScope.msgs = [];
+
+    $rootScope.save = function(name)
+    {
+        $rootScope.msgs.push(name + " successfully saved.");
+    }; // end save
+});
 
 //----------------------------------------------------------------------------------------------------------------------

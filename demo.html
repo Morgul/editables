@@ -144,7 +144,11 @@
 
             <div class="example">
                 <h3>WYSIWYG Editor Demo</h3>
-                <div style="min-height: 200px; border: 1px solid #aaa;" editable="tbars2" toolbar="text-edit" confirm="true">Type here...</div>
+                <div style="min-height: 200px; border: 1px solid #aaa;"  name="demo" editable="tbars2" toolbar="text-edit" confirm="true" onsave="save(name)">Type here...</div>
+                <br>
+                <div class="well">
+                    <div ng-repeat="msg in msgs track by $id($index)">{{ msg }}</div>
+                </div>
             </div>
         </div>
 

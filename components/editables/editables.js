@@ -13,6 +13,7 @@ var Editables = angular.module('editables', []);
 Editables.controller('EditableController',
     ['$scope', '$element', '$attrs', '$parse', function($scope, $element, $attrs, $parse)
         {
+            var name = $attrs.name;
             var editing = false;
             var dirty = false;
 
@@ -41,24 +42,31 @@ Editables.controller('EditableController',
 
             var saveCallback = function()
             {
-                if(element.html() != placeholder)
+                if($attrs.confirm)
                 {
-                    //TODO: Support custom save callbacks
-                    console.log('Save callback called.');
-
-                    if($attrs.confirm)
+                    var html = "";
+                    if(element.html() != placeholder)
                     {
-                        dirty = false;
-                        this.model = stripElement(element, $attrs.type);
+                        html = stripElement(element, $attrs.type);
                     } // end if
 
-                    // Blur the element.
-                    element.blur();
-
-                    // Let the rest of the world know what happened.
-                    $scope.$emit('save', this.model);
-                    $scope.$apply();
+                    dirty = false;
+                    this.model = html;
                 } // end if
+
+                // Blur the element.
+                element.blur();
+
+                // Let the rest of the world know what happened.
+                $scope.$emit('save', name);
+
+                // If we have a custom save handler, call it.
+                if($scope.onsave)
+                {
+                    $scope.onsave({name: name});
+                } // end if
+
+                $scope.$apply();
             }.bind(this);
 
             var cancelCallback = function()
@@ -74,7 +82,7 @@ Editables.controller('EditableController',
                 element.blur();
 
                 // Let the rest of the world know what happened.
-                $scope.$emit('cancel', this.model);
+                $scope.$emit('cancel', name);
                 $scope.$apply();
             }.bind(this);
 
@@ -410,6 +418,9 @@ Editables.directive('editable', function()
 {
     return {
         restrict: 'A',
+        scope: {
+           onsave: '&'
+        },
         controller: 'EditableController'
     }
 }); // end editable directive
