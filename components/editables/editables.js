@@ -66,7 +66,8 @@ Editables.controller('EditableController',
                 if(dirty)
                 {
                     // Reset our contents.
-                    document.execCommand('undo');
+                    element.html(this.model || "");
+                    setEndOfEditable(element);
                 } // end if
 
                 // Blur the element.
@@ -142,10 +143,7 @@ Editables.controller('EditableController',
                 {
                     element.html("<br>");
 
-                    // Reposition the text cursor to the start of the element.
-                    var range = document.createRange();
-                    range.setStart(element[0], 0);
-                    window.getSelection().addRange(range);
+                    setEndOfEditable(element)
                 } // end if
 
                 $scope.$apply();
@@ -155,6 +153,30 @@ Editables.controller('EditableController',
 //----------------------------------------------------------------------------------------------------------------------
 // Helpers
 //----------------------------------------------------------------------------------------------------------------------
+
+// Taken from http://stackoverflow.com/questions/1125292/how-to-move-cursor-to-end-of-contenteditable-entity
+function setEndOfEditable(element)
+{
+    element = element[0] || element;
+
+    var range, selection;
+    if(document.createRange) // Firefox, Chrome, Opera, Safari, IE 9+
+    {
+        range = document.createRange();
+        range.selectNodeContents(element);
+        range.collapse(false);
+        selection = window.getSelection();
+        selection.removeAllRanges();
+        selection.addRange(range);
+    }
+    else if(document.selection) // IE 8 and lower
+    {
+        range = document.body.createTextRange();
+        range.moveToElementText(element);
+        range.collapse(false);
+        range.select();
+    } // end if
+} // end setEndOfEditable
 
 function buildPlaceholder(parent)
 {
