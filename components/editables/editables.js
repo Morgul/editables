@@ -234,6 +234,16 @@ function buildToolbar(element, $attrs, saveCallback, cancelCallback)
         var hoverElem = buildToobarHoverElement(parent);
         toolbar.elem = buildToolbarElement(hoverElem, element, toolbar);
 
+        switch($attrs.toolbar)
+        {
+            case 'text-edit':
+                buildTextEditorToolbar(toolbar, element);
+                break;
+            default:
+                //TODO: Figure out what the default toolbar should be.
+                break;
+        } // end switch
+
         // Handle the case of having a toolbar with confirm added.
         if($attrs.confirm)
         {
@@ -273,14 +283,16 @@ function buildToolbarElement(parent, element, toolbar)
     // Event Handlers
     //------------------------------------------------------------------------------------------------------------------
 
+    var editFocus = false;
     var editHover = false;
+    var tbFocus = false;
     var tbHover = false;
 
     var hideHandler = function()
     {
         setTimeout(function()
         {
-            if(!editHover && !tbHover)
+            if(!editFocus && !editHover && !tbFocus && !tbHover)
             {
                 toolbar.hide();
             } // end if
@@ -288,26 +300,43 @@ function buildToolbarElement(parent, element, toolbar)
     }; // end hideHandler
 
     // Element hover
-    element.focus(function()
+    element.hover(function()
     {
         editHover = true;
-        toolbar.show();
-    });
-    element.blur(function()
+    }, function()
     {
         editHover = false;
         hideHandler();
     });
 
+    element.focus(function()
+    {
+        editFocus = true;
+        toolbar.show();
+    });
+    element.blur(function()
+    {
+        editFocus = false;
+        hideHandler();
+    });
+
     // Toolbar hover
-    parent.focus(function()
+    parent.hover(function()
     {
         tbHover = true;
-        //toolbar.show();
+    },function()
+    {
+        tbHover = false;
+        hideHandler();
+    });
+
+    parent.focus(function()
+    {
+        tbFocus = true;
     });
     parent.blur(function()
     {
-        tbHover = false;
+        tbFocus = false;
         hideHandler();
     });
 
@@ -332,12 +361,25 @@ function buildToobarHoverElement(parent)
 } // end buildToolbarElement
 
 //----------------------------------------------------------------------------------------------------------------------
-// Toobars
+// Toolbars
 //----------------------------------------------------------------------------------------------------------------------
 
-function buildTextEditorToolbar(toolbar)
+function buildTextEditorToolbar(toolbar, element)
 {
+    var formatBG = angular.element('<div class="btn-group" data-toggle="buttons-radio">').appendTo(toolbar.buttons);
+    var boldElem = angular.element('<button class="btn"><i class="icon-bold"></i></button>').appendTo(formatBG);
+    var italicElem = angular.element('<button class="btn"><i class="icon-italic"></i></button>').appendTo(formatBG);
+    var underlineElem = angular.element('<button class="btn"><i class="icon-underline"></i></button>').appendTo(formatBG);
+    var strikeElem = angular.element('<button class="btn"><i class="icon-strikethrough"></i></button>').appendTo(formatBG);
 
+    var alignBG = angular.element('<div class="btn-group" data-toggle="buttons-radio">').appendTo(toolbar.buttons);
+    var lAlign = angular.element('<button class="btn"><i class="icon-align-left"></i></button>').appendTo(alignBG);
+    var cAlign = angular.element('<button class="btn"><i class="icon-align-center"></i></button>').appendTo(alignBG);
+    var rAlign = angular.element('<button class="btn"><i class="icon-align-right"></i></button>').appendTo(alignBG);
+
+    var insertBG = angular.element('<div class="btn-group">').appendTo(toolbar.buttons);
+    var uList = angular.element('<button class="btn"><i class="icon-list-ul"></i></button>').appendTo(insertBG);
+    var oList = angular.element('<button class="btn"><i class="icon-list-ol"></i></button>').appendTo(insertBG);
 } // end buildTextEditorToolbar
 
 //----------------------------------------------------------------------------------------------------------------------
