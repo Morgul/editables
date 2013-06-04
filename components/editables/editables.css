@@ -1,11 +1,20 @@
+span.editable-parent
+{
+    display: inline-block;
+}
+
+.editable-parent
+{
+    /* Fix for Bootstrap. */
+    line-height: normal;
+}
+
 .editable
 {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-
+    display: inline-block;
+    width: 100%;
+    box-sizing: border-box;
+    position: relative;
     cursor: pointer;
     padding: 0 5px;
     border: 1px solid transparent;
@@ -26,6 +35,15 @@
 {
     color: #AAA;
     font-style: italic;
+}
+
+.editable.text-area
+{
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
 }
 
 .editable.single-line
