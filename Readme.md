@@ -1,7 +1,7 @@
 # Editables
 
 This project provides a collection of AngularJS directives for doing inline editing and binding on html elements, using `contenteditable`.
-In short, it's like the [x-editable]() project, only nicer, and using `contenteditable`.
+In short, it's like the [x-editable](http://vitalets.github.io/x-editable/) project, only nicer, and using `contenteditable`.
 
 ## Example
 
