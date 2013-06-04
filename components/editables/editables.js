@@ -18,7 +18,7 @@ Editables.controller('EditableController',
             var dirty = false;
 
             // Build our placeholder text
-            var placeholder = buildPlaceholder($element);
+            var placeholder = buildPlaceholder($element, $attrs.type);
 
             // Build our editable element
             var element = buildElement($element, $attrs.type, $scope);
@@ -176,23 +176,36 @@ function setEndOfEditable(element)
     } // end if
 } // end setEndOfEditable
 
-function buildPlaceholder(parent)
+function buildPlaceholder(parent, type)
 {
     // Store the value of the element as placeholder text.
     var placeholder = "<span class=\"placeholder\">" + parent.html() + "</span>";
-    parent.html("<br>");
+    parent.html("");
+
+    if(type == 'text-area')
+    {
+        parent.html("<br>");
+    } // end if
 
     return placeholder;
 } // end buildPlaceholder
 
 function buildElement(parent, type)
 {
-    // Required for our css to work
-    parent.css('position', 'relative');
+    // This will help theme.
+    parent.addClass('editable-parent');
 
     // Build a wrapper element, to help prevent style issues.
     var element = angular.element("<div></div>");
     element.appendTo(parent);
+
+    if(type == "text-area")
+    {
+        // Required for our css to work
+        parent.css('position', 'relative');
+
+        element.addClass('text-area');
+    } // end if
 
     // Make the element content editable
     element.attr("contenteditable","true");
