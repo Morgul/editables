@@ -129,6 +129,15 @@
                 <h3>WYSIWYG Editor Demo</h3>
                 <div style="min-height: 200px; border: 1px solid #aaa;" editable="tbars" toolbar="text-edit">Type here...</div>
             </div>
+            <p>
+                Editables also supports toolbars to make specific types of editing easier. As you can see, we have a basic
+                WYSIWYG editor implemented. All you need to do is specify <code>toolbar="text-edit"</code>.
+            </p>
+            <p>
+                The toolbar functionality is central to my concept to Editables. As such, most of my future development
+                will be focused on adding user-defined toolbars, and expanding the list of built-in toolbars. (Currently,
+                the only toolbar is the 'text-edit'.)
+            </p>
 
             <h2>Confirm</h2>
             <div class="example">
@@ -137,6 +146,20 @@
                     {{ cfirm }}
                 </div>
             </div>
+            <p>
+                While the two-way binding is very useful, it's not desirable in some situations. For those, you want to
+                specify <code>confirm="true"</code>, which will cause the editable to only submit when the save method
+                has been called. This isn't directly useful, without also including <code>toolbar</code> (no value
+                required).
+            </p>
+
+            <p>
+                With both included, Editables renders a toolbar with Save and Cancel buttons. When you hit Save, the
+                value of the editable is saved to the model, and the `save` message is emitted up the scope tree. If you
+                instead hit Cancel, the field is reverted, and the 'cancel' message is emitted up the scope tree. (<i>
+                Note: The <code>name</code> property of the element is passed as the only argument to these messages.
+                </i>)
+            </p>
 
             <p>
                 Here's the WYSIWYG demo again, with confirm:
@@ -150,6 +173,11 @@
                     <div ng-repeat="msg in msgs track by $id($index)">{{ msg }}</div>
                 </div>
             </div>
+            <p>
+                This also demonstrates support for a custom save callback. Simply specify the <code>onsave</code> parameter,
+                setting it to an AngularJS expression. The <code>name</code> parameter is passed in, and can be referenced
+                by the expression.
+            </p>
         </div>
 
         <!-- I like space at the end of my page, and am also lazy. -->
