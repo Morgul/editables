@@ -11,24 +11,11 @@ var Editables = angular.module('editables', []);
 //----------------------------------------------------------------------------------------------------------------------
 
 Editables.controller('EditableController',
-    ['$scope', '$element', '$attrs', '$parse', function($scope, $element, $attrs, $parse)
+    ['$scope', '$element', '$attrs', '$parse', function($scope, $element, $attrs)
         {
             var name = $attrs.name;
             var editing = false;
             var dirty = false;
-
-            // Define the model we're 'bound' to.
-            var _model = $parse($attrs.editable);
-            Object.defineProperty(this, "model", {
-                get: function()
-                {
-                    return _model($scope);
-                },
-                set: function(val)
-                {
-                    _model.assign($scope, val);
-                }
-            });
 
             // Build our placeholder text
             var placeholder = buildPlaceholder($element);
@@ -51,7 +38,7 @@ Editables.controller('EditableController',
                     } // end if
 
                     dirty = false;
-                    this.model = html;
+                    $scope.editable = html;
                 } // end if
 
                 // Blur the element.
@@ -74,7 +61,7 @@ Editables.controller('EditableController',
                 if(dirty)
                 {
                     // Reset our contents.
-                    element.html(this.model || "");
+                    element.html($scope.editable || "");
                     setEndOfEditable(element);
                 } // end if
 
@@ -94,17 +81,17 @@ Editables.controller('EditableController',
             //----------------------------------------------------------------------------------------------------------
 
             // Bind scope changes to the value of the element.
-            $scope.$watch($attrs.editable, function()
+            $scope.$watch('editable', function()
             {
-                if(!this.model && !editing)
+                if(!$scope.editable && !editing)
                 {
                     element.html(placeholder);
                 }
                 else
                 {
-                    if(this.model != stripElement(element, $attrs.type))
+                    if($scope.editable != stripElement(element, $attrs.type))
                     {
-                        element.html(this.model);
+                        element.html($scope.editable);
                     } // end if
                 } // end if
             }.bind(this));
@@ -122,7 +109,7 @@ Editables.controller('EditableController',
                 if(!$attrs.confirm)
                 {
                     dirty = false;
-                    this.model = stripElement(element, $attrs.type);
+                    $scope.editable = stripElement(element, $attrs.type);
                 } // end if
 
                 $scope.$apply();
@@ -475,7 +462,8 @@ Editables.directive('editable', function()
     return {
         restrict: 'A',
         scope: {
-           onsave: '&'
+            editable: '=',
+            onsave: '&'
         },
         controller: 'EditableController'
     }
