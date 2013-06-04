@@ -47,6 +47,18 @@
 
 /* Bootstrap Overrides */
 
+i.icon-tiny
+{
+    font-size: 10px;
+}
+
+i.icon-mod
+{
+    font-size: 8px;
+    position: relative;
+    top: -4px;
+}
+
 .navbar.navbar-small .navbar-inner
 {
     min-height: 20px;

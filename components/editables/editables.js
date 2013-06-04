@@ -133,10 +133,13 @@ Editables.controller('EditableController',
             {
                 editing = false;
 
-                // Check to see if we need to apply placeholder text.
-                if(!element.text())
+                if(!$attrs.confirm)
                 {
-                    element.html(placeholder);
+                    // Check to see if we need to apply placeholder text.
+                    if(!element.text())
+                    {
+                        element.html(placeholder);
+                    } // end if
                 } // end if
 
                 $scope.$apply();
@@ -147,7 +150,7 @@ Editables.controller('EditableController',
             {
                 editing = true;
 
-                if(!this.model)
+                if(element.html() == placeholder)
                 {
                     element.html("<br>");
 
@@ -390,26 +393,79 @@ function buildToobarHoverElement(parent)
     return hoverElem;
 } // end buildToolbarElement
 
+function doCmd(cmd)
+{
+    document.execCommand(cmd, null, null);
+} // end doCmd
+
 //----------------------------------------------------------------------------------------------------------------------
 // Toolbars
 //----------------------------------------------------------------------------------------------------------------------
 
 function buildTextEditorToolbar(toolbar, element)
 {
-    var formatBG = angular.element('<div class="btn-group" data-toggle="buttons-radio">').appendTo(toolbar.buttons);
-    var boldElem = angular.element('<button class="btn"><i class="icon-bold"></i></button>').appendTo(formatBG);
-    var italicElem = angular.element('<button class="btn"><i class="icon-italic"></i></button>').appendTo(formatBG);
-    var underlineElem = angular.element('<button class="btn"><i class="icon-underline"></i></button>').appendTo(formatBG);
-    var strikeElem = angular.element('<button class="btn"><i class="icon-strikethrough"></i></button>').appendTo(formatBG);
+    var formatBG = angular.element('<div class="btn-group" data-toggle="buttons-checkbox">').appendTo(toolbar.buttons);
+    var boldElem = angular.element('<button class="btn"><i class="icon-bold"></i></button>')
+        .appendTo(formatBG)
+        .click(function() { doCmd('bold') });
+    var italicElem = angular.element('<button class="btn"><i class="icon-italic"></i></button>')
+        .appendTo(formatBG)
+        .click(function() { doCmd('italic') });
+    var underlineElem = angular.element('<button class="btn"><i class="icon-underline"></i></button>')
+        .appendTo(formatBG)
+        .click(function() { doCmd('underline') });
+    var strikeElem = angular.element('<button class="btn"><i class="icon-strikethrough"></i></button>')
+        .appendTo(formatBG)
+        .click(function() { doCmd('strikethrough') });
+
+    var fontBG = angular.element('<div class="btn-group">').appendTo(toolbar.buttons);
+    var fontInc = angular.element('<button class="btn"><i class="icon-plus icon-mod"></i><i class="icon-font"></button>')
+        .appendTo(fontBG)
+        .click(function() { doCmd('increaseFontSize') });
+    var fontDec = angular.element('<button class="btn"><i class="icon-minus icon-mod"></i><i class="icon-font"></i></button>')
+        .appendTo(fontBG)
+        .click(function() { doCmd('decreaseFontSize') });
 
     var alignBG = angular.element('<div class="btn-group" data-toggle="buttons-radio">').appendTo(toolbar.buttons);
-    var lAlign = angular.element('<button class="btn"><i class="icon-align-left"></i></button>').appendTo(alignBG);
-    var cAlign = angular.element('<button class="btn"><i class="icon-align-center"></i></button>').appendTo(alignBG);
-    var rAlign = angular.element('<button class="btn"><i class="icon-align-right"></i></button>').appendTo(alignBG);
+    var lAlign = angular.element('<button class="btn"><i class="icon-align-left"></i></button>')
+        .appendTo(alignBG)
+        .click(function() { doCmd('justifyleft') });
+    var cAlign = angular.element('<button class="btn"><i class="icon-align-center"></i></button>')
+        .appendTo(alignBG)
+        .click(function() { doCmd('justifycenter') });
+    var rAlign = angular.element('<button class="btn"><i class="icon-align-right"></i></button>')
+        .appendTo(alignBG)
+        .click(function() { doCmd('justifyright') });
 
     var insertBG = angular.element('<div class="btn-group">').appendTo(toolbar.buttons);
-    var uList = angular.element('<button class="btn"><i class="icon-list-ul"></i></button>').appendTo(insertBG);
-    var oList = angular.element('<button class="btn"><i class="icon-list-ol"></i></button>').appendTo(insertBG);
+    var uList = angular.element('<button class="btn"><i class="icon-list-ul"></i></button>')
+        .appendTo(insertBG)
+        .click(function() { doCmd('insertunorderedlist') });
+    var oList = angular.element('<button class="btn"><i class="icon-list-ol"></i></button>')
+        .appendTo(insertBG)
+        .click(function() { doCmd('insertorderedlist') });
+
+    setInterval(function()
+    {
+        var state = {
+            bold:  document.queryCommandState("bold"),
+            italic:  document.queryCommandState("italic"),
+            underline:  document.queryCommandState("underline"),
+            strikethrough:  document.queryCommandState("strikethrough"),
+            leftAlign:  document.queryCommandState("justifyleft"),
+            centerAlign:  document.queryCommandState("justifycenter"),
+            rightAlign:  document.queryCommandState("justifyright")
+        };
+
+        // Update states
+        boldElem.toggleClass('active', state.bold);
+        italicElem.toggleClass('active', state.italic);
+        underlineElem.toggleClass('active', state.underline);
+        strikeElem.toggleClass('active', state.strikethrough);
+        lAlign.toggleClass('active', state.leftAlign);
+        cAlign.toggleClass('active', state.centerAlign);
+        rAlign.toggleClass('active', state.rightAlign);
+    }, 200);
 } // end buildTextEditorToolbar
 
 //----------------------------------------------------------------------------------------------------------------------
